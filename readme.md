@@ -217,3 +217,167 @@ $this->middleware(function ($request, Closure $next) {
 ```
 ### 要点难点及解决方案
 - 相对应用户的角色显示有问题，已解决
+## Day11
+### 开发任务
+#### 平台
+- 导航菜单管理
+- 根据权限显示菜单
+- 配置RBAC权限管理
+#### 商家
+- 发送邮件(商家审核通过,以及有订单产生时,给商家发送邮件提醒) 用户
+- 下单成功时,给用户发送手机短信提醒
+### 设计要点
+##### 邮件发送
+- 配置.env
+```php
+MAIL_DRIVER=smtp
+MAIL_HOST=smtp.qq.com
+MAIL_PORT=25
+MAIL_USERNAME=1272201461@qq.com
+MAIL_PASSWORD=pasxadtcpuhsfjje
+MAIL_ENCRYPTION=null
+```
+- php artisan make:mail OrderShipped
+- 打开E:\web\ele\app\Mail\OrderShipped.php
+```php
+<?php
+
+namespace App\Mail;
+
+use App\Models\Order;
+use Illuminate\Bus\Queueable;
+use Illuminate\Mail\Mailable;
+use Illuminate\Queue\SerializesModels;
+use Illuminate\Contracts\Queue\ShouldQueue;
+
+class OrderShipped extends Mailable
+{
+    use Queueable, SerializesModels;
+    //声明一个仅供的属性用来存订单模型对象
+    public $order;
+
+    /**
+     * OrderShipped constructor.
+     * Create a new message instance.
+     * @param Order $order
+     */
+    public function __construct(Order $order)
+    {
+        //从外部传入订单实例
+        $this->order = $order;
+    }
+
+    /**
+     * Build the message.
+     * @return $this
+     */
+    public function build()
+    {
+        return $this
+            ->from("1272201461@qq.com")
+            ->view('mail.order', ['order' => $this->order]);
+    }
+}
+```
+- 发送邮件
+```php
+$order =\App\Models\Order::find(26);
+$user=User::where('shop_id',$id)->first();
+//通过审核发送邮件
+Mail::to($user)->send(new OrderShipped($order));
+```
+- 导航菜单表navs
+### 要点难点及解决方案
+- 没问题
+## Day12
+### 开始任务
+#### 平台
+- 抽奖活动管理[报名人数限制、报名时间设置、开奖时间设置]
+- 抽奖报名管理[可以查看报名的账号列表]
+- 活动奖品管理[开奖前可以给该活动添加、修改、删除奖品]
+- 开始抽奖[根据报名人数随机抽取活动奖品,将活动奖品和报名的账号随机匹配]
+- 抽奖完成时，给中奖商户发送中奖通知邮件
+#### 商户
+- 抽奖活动列表
+- 报名抽奖活动
+- 查看抽奖活动结果
+### 设计要点
+- 抽奖活动表events
+- 抽奖活动奖品表event_prizes
+- 活动报名表 event_users
+##### 开奖
+- 通过活动ID找出对应的商户和奖品
+- 把商户打乱，循环奖品给奖品的user_id绑定上商户的ID
+##### 上线
+##### 安装宝塔
+- 重置服务器，安装最新的centos操作系统
+- 找到外网IP，用Xshell连接上服务器
+- 在XShell执行命令
+```php
+yum install -y wget && wget -O install.sh http://download.bt.cn/install/install.sh && sh install.sh
+```
+- 开端口，以下主机商必看（开端口教程，不开不能用）：
+```php
+腾讯云：https://www.bt.cn/bbs/thread-1229-1-1.html
+阿里云：https://www.bt.cn/bbs/thread-2897-1-1.html
+华为云：https://www.bt.cn/bbs/thread-3923-1-1.html
+```
+- 登录宝塔，安装LAMP PHP版本>7.0
+```php
+Bt-Panel: http://118.24.189.88:8888
+username: xxxx
+password: xxx
+```
+- 添加一个网站，设置域名 三个域名
+
+- 把代码更新到github
+
+- 在XShell中www/wwwroot的目录中执行命令
+```php
+git clone https://github.com/jiangchunchun521/ele.git
+或直接下载：
+https://github.com/jiangchunchun521/ele/archive/master.zip 到本地其后再上传到网站根目录
+```
+- 进入php0325_ele目录
+- 更新composer版本 
+```php
+composer self-update
+```
+- 配置国内镜像站点 
+```php
+composer config -g repo.packagist composer https://packagist.laravel-china.org 
+```
+- 删除根目录下
+```php
+composer.lock
+```
+- 进入项目根目录,执行下面语句安装框架和插件
+```php
+composer install
+```
+- 发现错误如下：
+```php
+[Symfony\Component\Process\Exception\RuntimeException]                                   
+  The Process class relies on proc_open, which is not available on your PHP installation. 
+```
+- 打开PHP配置文件，删除相关禁用函数
+
+- 执行下面命令生成新配置文件
+```php
+cp .env.example .env
+```
+- 执行下面命令生成key
+```php
+php artisan key:generate
+```
+- 执行下面命令把这个项目目录的所有者更改www
+```php
+chown -R www.www ele
+```
+- 执行数据迁移
+- 以后每次更新直接用
+```php
+git pull
+```
+### 要点难点及解决方案
+- 没问题 
