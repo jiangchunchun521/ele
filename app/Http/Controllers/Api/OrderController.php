@@ -247,14 +247,14 @@ class OrderController extends BaseController
             $qrCode->setSize(200);//二维码大小
 
             //Set advanced options
-            $qrCode->setWriterByName('jpeg');
+            $qrCode->setWriterByName('png');
             $qrCode->setMargin(10);
             $qrCode->setEncoding('UTF-8');
             $qrCode->setErrorCorrectionLevel(ErrorCorrectionLevel::HIGH);//容错级别
             $qrCode->setForegroundColor(['r' => 0, 'g' => 0, 'b' => 0, 'a' => 0]);
             $qrCode->setBackgroundColor(['r' => 255, 'g' => 255, 'b' => 255, 'a' => 0]);
             $qrCode->setLabel('微信扫码支付', 16, public_path() . '/assets/noto_sans.otf', LabelAlignment::CENTER);
-            $qrCode->setLogoPath(public_path() . '/' . $shop->shop_img);
+            $qrCode->setLogoPath(public_path() . '/assets/123.png');
             $qrCode->setLogoWidth(80);//logo大小
 
             //Directly output the QR code
