@@ -40,6 +40,11 @@ Route::namespace('Api')->group(function () {
     Route::get('order/list','OrderController@list');
     Route::get('order/detail','OrderController@detail');
     Route::post('order/add','OrderController@add');
+    //订单状态
+    Route::get('order/status','OrderController@status');
     //支付
     Route::post('order/pay','OrderController@pay');
+    //微信支付
+    Route::get('order/wxPay','OrderController@wxPay');
+    Route::any('order/ok','OrderController@ok');
 });

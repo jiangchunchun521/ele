@@ -177,8 +177,19 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         Mews\Captcha\CaptchaServiceProvider::class,
+        /**
+         * 编辑器
+         */
         Overtrue\LaravelUEditor\UEditorServiceProvider::class,
+        /**
+         * 发短信
+         */
         Mrgoon\AliSms\ServiceProvider::class,
+        /**
+         * 全局搜索
+         */
+        Laravel\Scout\ScoutServiceProvider::class,
+        Vanry\Scout\TNTSearchScoutServiceProvider::class,
 
     ],
 

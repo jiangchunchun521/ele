@@ -32,7 +32,11 @@
                 </td>
                 <td>
                     @if(date('Y-m-d h:i:s',$event->prize_date) <= date('Y-m-d h:i:s',time()))
-                        <a href="{{route("events.start",$event)}}" class="btn btn-info">开始抽奖</a>
+                        @if($event->is_prize==0)
+                            <a href="{{route("events.start",$event)}}" class="btn btn-info">开始抽奖</a>
+                        @else
+                            <a href="#" class="btn btn-success">抽奖完成</a>
+                        @endif
                     @endif
                     @if(date('Y-m-d h:i:s',$event->start) > date('Y-m-d h:i:s',time()))
                         <a href="{{route("events.edit",$event)}}" class="btn btn-success"><i

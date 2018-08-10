@@ -25,7 +25,7 @@
                     @endif
                 </td>
                 <td>
-                    @if(date('Y-m-d h:i:s',$prize->event->prize_date) > date('Y-m-d h:i:s',time()))
+                    @if(date('Y-m-d H:i:s',$prize->event->prize_date) > date('Y-m-d H:i:s',time()))
                         <a href="{{route("prizes.edit",$prize)}}" class="btn btn-success"><i
                                     class="glyphicon glyphicon-edit"></i></a>
                         <a href="{{route("prizes.del",$prize)}}" class="btn btn-danger"><i

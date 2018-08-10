@@ -122,7 +122,7 @@ class EventController extends BaseController
         //通过id找到对象
         $event = Event::find($id);
         $event->is_prize = 1;
-        $event->save;
+        $event->save();
         //提示
         $request->session()->flash('success', '开奖成功完成');
         //跳转

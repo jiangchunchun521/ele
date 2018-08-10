@@ -6,7 +6,7 @@ use App\Models\Member;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Redis;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Validator;
 use Mrgoon\AliSms\AliSms;
 
@@ -27,7 +27,7 @@ class MemberController extends BaseController
         //设置过期时间
         Redis::expire('tel_' . $tel, 300);*/
         //存短信验证码,设置过期时间
-        cache(['tel_' . $tel => $code], 300);
+        Cache::set(['tel_' . $tel => $code], 300);
         return [
             "status" => "true",
             "message" => "获取短信验证码成功" . $code
@@ -81,7 +81,7 @@ class MemberController extends BaseController
             ];
         }
         //取出验证码
-        $code = cache('tel_' . $data['tel']);
+        $code = Cache::get('tel_' . $data['tel']);
         //判断验证码是否一致
         if ($code != $data['sms']) {
             return [
@@ -149,7 +149,7 @@ class MemberController extends BaseController
             ];
         }
         //取出验证码
-        $code = cache('tel_' . $data['tel']);
+        $code = Cache::get('tel_' . $data['tel']);
         //判断验证码是否一致
         if ($code != $data['sms']) {
             return [

@@ -30,7 +30,7 @@
                                 <td>{{date('Y-m-d h:i:s',$event->prize_date)}}</td>
                                 <td>{{$event->num}}</td>
                                 <td>
-                                    @if($event->is_prize==1&&date('Y-m-d h:i:s',$event->prize_date)==date('Y-m-d h:i:s',time()))
+                                    @if($event->is_prize==1)
                                         <i class="glyphicon glyphicon-ok" style="color: chartreuse"></i>
                                     @else
                                         <i class="glyphicon glyphicon-remove" style="color: red"></i>

@@ -7,6 +7,7 @@ use App\Models\MenuCategory;
 use App\Models\Shop;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Cache;
 
 class ShopController extends BaseController
 {
@@ -17,10 +18,13 @@ class ShopController extends BaseController
      */
     public function list(Request $request)
     {
-        $keyword = $request->input('keyword') ? $request->input('keyword') : "";
-        //得到状态为正常的店铺信息
-        $shops = Shop::where('status', 1)->where('shop_name', 'like', "%$keyword%")->get();
-        //dump($shops);
+        //接收参数
+        $keyword = $request->input('keyword');
+        if ($keyword === null) {
+            $shops = Shop::where('status', 1)->get();
+        } else {
+            $shops = Shop::search($keyword)->where('status', 1)->get();
+        }
         //循环取出
         foreach ($shops as $shop) {
             $shop->distance = rand(1000, 4000);
@@ -38,6 +42,11 @@ class ShopController extends BaseController
     {
         //店铺id
         $id = $request->input('id');
+        //缓存
+        $data = Cache::get('shop:' . $id);
+        if ($data) {
+            return $data;
+        }
         //得到店铺信息
         $shop = Shop::findOrFail($id);
         //给店铺添加没用过的
@@ -73,6 +82,8 @@ class ShopController extends BaseController
         }*/
         //把分类数据追加到shop
         $shop->commodity = $cates;
+        //缓存，并设置过期时间
+        Cache::set('shop:' . $id, $shop, 60 * 60 * 24 * 7);
         return $shop;
     }
 }

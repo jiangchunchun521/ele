@@ -12,11 +12,27 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('index');
+});
+
+Route::get('/order/clear', function () {
+//处理超时未支付的订单
+    /**
+     * 1.找出 超时 未支付 订单
+     * 当前时间-创建时间>15*60
+     * 当前时间-15*60>创建时间
+     * 创建时间<当前时间-15*60
+     * */
+    while (true) {
+        $orders = \App\Models\Order::where("status", 0)
+            ->where('created_at', '<', date("Y-m-d H:i:s", (time() - 15 * 60)))
+            ->update(['status' => -1]);
+        sleep(5);
+    }
 });
 
 //平台admin
-Route::domain('admin.elem.com')->namespace('Admin')->group(function () {
+Route::domain(env('ADMIN_DOMAIN'))->namespace('Admin')->group(function () {
     //管理员
     Route::get('admin/index', "AdminController@index")->name('admin.index');
     Route::any('admin/reg', "AdminController@reg")->name('admin.reg');
@@ -86,7 +102,7 @@ Route::domain('admin.elem.com')->namespace('Admin')->group(function () {
     Route::get('eventUser/index', "EventUserController@index")->name('eventUsers.index');
 });
 //商户shop
-Route::domain('shop.elem.com')->namespace('Shop')->group(function () {
+Route::domain(env('SHOP_DOMAIN'))->namespace('Shop')->group(function () {
     //商家账号
     Route::get('user/index', "UserController@index")->name('user.index');
     Route::any('user/reg', "UserController@reg")->name('user.reg');
