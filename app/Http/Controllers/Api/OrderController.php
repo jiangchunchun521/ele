@@ -13,9 +13,11 @@ use App\Models\User;
 use App\Mail\OrderShipped;
 use EasyWeChat\Foundation\Application;
 use Illuminate\Database\QueryException;
+
 use Endroid\QrCode\ErrorCorrectionLevel;
 use Endroid\QrCode\LabelAlignment;
 use Endroid\QrCode\QrCode;
+
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
@@ -225,7 +227,7 @@ class OrderController extends BaseController
             'body' => $shop->shop_name,
             'detail' => $shop->shop_name.'详情',
             'out_trade_no' => $order->sn,
-            'total_fee' => $order->total * 100, // 单位：分
+            'total_fee' => $order->total * 100, // 单位：分$order->total * 100
             'notify_url' => 'http://elemwww.jiangchunrong.cn/api/order/ok', // 支付结果通知网址，如果不设置则会使用配置里的默认地址
             // 'openid' => '当前用户的 openid', // trade_type=JSAPI，此参数必传，用户在商户appid下的唯一标识，
         ];
